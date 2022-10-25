@@ -64,6 +64,16 @@ def Betalingsplan():
             string = string + """Du har fått 0.5% mer i rente fordi du har 2 biler eller mer.
 """
             re += 0.005
+        tb = round(la / float(te), 2)
+        rl = la
+        string = string + "Du har " + str(round(re * 100, 2)) + """% i rente.
+"""
+        string = string + "Ditt avdrag for hvert termin skal være " + str(tb) + """kr.
+"""
+        for termin in range(te):
+            string = string + "Termin " + str(termin + 1) + ": " + str(round(rl, 2)) + "kr i restlån, " + str(round(rl * re, 2)) + "kr i rente. Du må betale: " + str(round(tb + (rl * re), 2)) + """kr.
+"""
+            rl -= tb
         bplan.config(text=string)
 
 tkinter.Label(root, text="Boliglån kalkulator", font=('Segoe UI', '50')).place(x=10, y=10)
