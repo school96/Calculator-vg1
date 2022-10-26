@@ -74,7 +74,10 @@ def Betalingsplan():
             string = string + "Termin " + str(termin + 1) + ": " + str(round(rl, 2)) + "kr i restlån, " + str(round(rl * re, 2)) + "kr i rente. Du må betale: " + str(round(tb + (rl * re), 2)) + """kr.
 """
             rl -= tb
-        bplan.config(text=string)
+        bplan.config(state="normal")
+        bplan.delete("1.0", "end")
+        bplan.insert("1.0", string)
+        bplan.config(state="disabled")
 
 tkinter.Label(root, text="Boliglån kalkulator", font=('Segoe UI', '50')).place(x=10, y=10)
 
@@ -106,8 +109,13 @@ ttk.Button(root, text="Regne ut betalingsplan", style="submit.TButton", command=
 ttk.Separator(root, orient="vertical").place(x=625, y=0, height=720)
 
 tkinter.Label(root, text="Betalingsplan", font=('Segoe UI', '50')).place(x=650, y=10)
-bplan = tkinter.Label(root, text="""Når betalingsplan ditt var regnte ut,
-du vil se det her.""", font=('Segoe UI', '9'), anchor="nw", justify="left")
-bplan.place(x=650, y=120, height=520)
+bplan = tkinter.Text(root, font=('Segoe UI', '9'))
+bplan.place(x=650, y=120, height=520, width=600)
+bplan.insert("1.0", chars="""Når betalingsplan ditt var regnte ut,
+du vil se det her.""")
+bplan.config(state="disabled")
+scroll = ttk.Scrollbar(root, command=bplan.yview)
+bplan["yscrollcommand"] = scroll.set
+scroll.place(y=120, x=1250, width=20, height=520)
 
 root.mainloop()
