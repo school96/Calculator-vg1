@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import ttk
 from tkinter import messagebox
+from tkinter import filedialog
 
 
 root = tkinter.Tk()
@@ -12,7 +13,10 @@ def ValError(steg):
     messagebox.showerror(title="Verdifeil", message="""En eller flere verdier er ugyldig eller tømme. Sjekk hva du har skrevet inn og prøv igjen. 
     (Steg""" + str(steg) + ")")
 
+bp = False
+
 def Betalingsplan():
+    global bp
     cont = 1
     string = """"""
     try:
@@ -78,6 +82,16 @@ def Betalingsplan():
         bplan.delete("1.0", "end")
         bplan.insert("1.0", string)
         bplan.config(state="disabled")
+        bp = True
+
+def SavePlan():
+    global bp
+    if bp:
+        f = filedialog.asksaveasfile(filetypes=[("Text Document", "*.txt")], initialfile="Betalingsplan.txt", mode="w")
+        f.write(bplan.get("1.0", "end"))
+        f.close()
+    else:
+        messagebox.showinfo(title="Kan ikke lagre", message="Du ikke har en betalingsplan!")
 
 tkinter.Label(root, text="Boliglån kalkulator", font=('Segoe UI', '50')).place(x=10, y=10)
 
@@ -117,5 +131,7 @@ bplan.config(state="disabled")
 scroll = ttk.Scrollbar(root, command=bplan.yview)
 bplan["yscrollcommand"] = scroll.set
 scroll.place(y=120, x=1250, width=20, height=520)
+
+ttk.Button(root, text="Lagre betalingsplan", style="submit.TButton", command=SavePlan).place(x=800, y=640, width=300)
 
 root.mainloop()
